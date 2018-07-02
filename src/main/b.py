@@ -1,16 +1,15 @@
 import cv2
-
+import numpy as np
+import math
 def getCenter(_max_contour):
     cx = 0
     cy = 0
     A = 0
-
     for i in range(len(_max_contour) - 1):
         xi = _max_contour[i][0][0]
         yi = _max_contour[i][0][1]
         xii = _max_contour[i + 1][0][0]
         yii = _max_contour[i + 1][0][1]
-        # cv2.circle(img_out, (int(xi), int(yi)), 1, (0, 0, 255), -1)
         tmp = (xi * yii) - (xii * yi)
         cx += (xi + xii) * tmp
         cy += (yi + yii) * tmp
@@ -18,18 +17,18 @@ def getCenter(_max_contour):
     A /= 2
     cx /= 6 * A
     cy /= 6 * A
-    # print(cx, cy)
-    cv2.circle(img_out, (int(cx), int(cy)), 2, (0, 255, 255), -1)
+    # cv2.circle(img_out, (int(cx), int(cy)), 2, (0, 255, 255), -1)
     return cx, cy
 
-cv2.namedWindow("output");
-cv2.moveWindow("output", 800,300);
-cv2.namedWindow("input");
-cv2.moveWindow("input", 800,500);
-img_in = cv2.imread("./../resource/test3.jpg")
+
+img_in = cv2.imread("./../resource/test4.jpg")
 # pre-process the image by resizing it, converting it to
 # graycale, blurring it, and computing an edge map
 w, h, c = img_in.shape #img_in is the input image
+cv2.namedWindow("output");
+cv2.moveWindow("output", 400,300);
+cv2.namedWindow("input");
+cv2.moveWindow("input", 400 + h + 50,300);
 resize_coeff = 1
 img = cv2.resize(img_in, (int(resize_coeff*h), int(resize_coeff*w)))
 
@@ -48,13 +47,12 @@ img_out = cv2.resize(img_in, (int(resize_coeff*h), int(resize_coeff*w)))
 cx, cy= getCenter(max_contour)
 cv2.drawContours(img_out, [max_contour], 0, (0, 255, 100), 2)
 
+
 tmp = max_contour * 4 // 3
-# print(tmp)
-_cx, _cy = getCenter(tmp)
-# print( _cx/cx , _cy/cy)
-# tmp = tmp * 75 // 100
-# print(max_contour)
-print(tmp)
+_cx, _cy= getCenter(tmp)
+for i in range(len(tmp)):
+    tmp[i][0][0] = tmp[i][0][0] - (_cx - cx)
+    tmp[i][0][1] = tmp[i][0][1] - (_cy - cy)
 cv2.drawContours(img_out, [tmp], 0, (0, 255, 100), 2)
 
 cv2.imshow("output", img_out)
