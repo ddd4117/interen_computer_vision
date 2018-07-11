@@ -41,6 +41,10 @@ while(True):
 
     cv2.imshow('red', frame)
 
+    print(cv2.ocl.haveOpenCL())
+    cv2.ocl.setUseOpenCL(True)
+    print(cv2.ocl.useOpenCL())
+
     print("[INFO] detection took: {}s".format(
         (datetime.datetime.now() - start).total_seconds()))
 
