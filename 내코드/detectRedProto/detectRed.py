@@ -3,30 +3,19 @@ import datetime
 import cv2
 import numpy as np
 
-def callback(x):
-    pass
 
-cap = cv2.VideoCapture('driving.mp4')
-
-ilowH = 130
-ihighH = 200
-
-ilowS = 30
-ihighS = 225
-ilowV = 80
-ihighV = 225
-
-# create trackbars for color change
-
-cnt=1
-
-while(True):
+def findColor(frame,ret):
     # grab the frame
-    ret, frame = cap.read()
+    ilowH = 130
+    ihighH = 200
+
+    ilowS = 50
+    ihighS = 225
+    ilowV = 80
+    ihighV = 225
     ori=frame.copy()
 
     start = datetime.datetime.now()
-    #################################################################################################33
 
     hsv1 = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     hsv2 = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -39,44 +28,20 @@ while(True):
 
     frame = cv2.bitwise_and(frame, frame, mask=mask)
 
+    cv2.imshow("Original", ori)
     cv2.imshow('red', frame)
-
-    print(cv2.ocl.haveOpenCL())
-    cv2.ocl.setUseOpenCL(True)
-    print(cv2.ocl.useOpenCL())
 
     print("[INFO] detection took: {}s".format(
         (datetime.datetime.now() - start).total_seconds()))
 
-    """
-     ## this part erode and dilate picture
-     ## then cannot find small flag... 
-    thres = frame.copy()
-    kernel = np.ones((5, 5), np.uint8) 
-    thres = cv2.erode(thres, kernel, iterations=cnt)
-    thres = cv2.dilate(thres, kernel, iterations=cnt)
-
-    thres = cv2.dilate(thres, kernel, iterations=cnt)
-    thres = cv2.erode(thres, kernel, iterations=cnt)
-    """
-
-    #################################################################################################33
-
-    canny = frame.copy()
-    canny = cv2.Canny(canny, 100, 200)
-
-    gray = canny.copy()
-    gray, contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    gray = cv2.drawContours(frame, contours, -1, (0, 255, 0), 3)
+cap = cv2.VideoCapture('driving2.mp4')
 
 
-    cv2.imshow("Original", ori)
-    #    cv2.imshow("Thresholded Image", thres)  # show the thresholded image
-    cv2.imshow("Canny", canny)
-#    cv2.imshow("Result window", gray)
-    # show thresholded image
 
-    k = cv2.waitKey(10) & 0xFF # large wait time to remove freezing
+while(True):
+    ret, frame = cap.read()
+    findColor(frame,ret)
+    k = cv2.waitKey(30) & 0xFF # large wait time to remove freezing
     if k == 113 or k == 27:
         break
 
