@@ -18,14 +18,12 @@ def findColor(frame,ret):
 
     start = datetime.datetime.now()
 
-    hsv1 = cv2.cvtColor(frame, cv2.COLOR_BGR2YUV)
+    yuv = cv2.cvtColor(frame, cv2.COLOR_BGR2YUV)
+
+    Ymask = cv2.inRange(yuv, np.array([0,130,130]), np.array([80,225,225])) # yellow + red : np.array([20 or 30, 225, 255])  # only red : np.array([10, 225, 255])
 
 
-    #mask = cv2.inRange(hsv1, np.array([y,u,v]), np.array([Y,U,V])) # yellow + red : np.array([20 or 30, 225, 255])  # only red : np.array([10, 225, 255])
-    mask = cv2.inRange(hsv1, np.array([0,130,130]), np.array([80,225,225])) # yellow + red : np.array([20 or 30, 225, 255])  # only red : np.array([10, 225, 255])
-
-
-    frame = cv2.bitwise_and(frame, frame, mask=mask)
+    frame = cv2.bitwise_and(frame, frame, mask=Ymask)
 
     cv2.imshow("Original", ori)
     cv2.imshow('red', frame)
