@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 
-def findColor(frame,ret):
+def findColor(frame, ret):
     # grab the frame
     ilowH = 150 # yellow + red : 130 # only red : 150
     ihighH = 180 # yellow + red : 200 # only red : 180
@@ -51,13 +51,11 @@ def findColor(frame,ret):
         (datetime.datetime.now() - start).total_seconds()))
     return frame
 
-
-
-cap = cv2.VideoCapture('driving4.mp4')
+cap = cv2.VideoCapture('driving_triangle.mp4')
 
 while(True):
     ret, frame = cap.read()
-    findColor(frame,ret)
+    findColor(frame, ret)
     k = cv2.waitKey(10) & 0xFF # large wait time to remove freezing
     if k == 113 or k == 27:
         break
