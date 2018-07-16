@@ -183,7 +183,7 @@ if __name__ == "__main__":
     test.create_graph()
 
     test.softmax_tensor_ = test.sess.graph.get_tensor_by_name('final_result:0')
-    cap = cv2.VideoCapture("./resource/test9.mp4")
+    cap = cv2.VideoCapture("./resource/test7.mp4")
 
     while cap.isOpened():
         ret, img_in = cap.read()
